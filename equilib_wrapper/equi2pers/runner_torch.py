@@ -101,6 +101,17 @@ def run(
     y_shift = (v_range[0] + torch.pi / 2) / torch.pi * h_equi
     grid = grid - torch.tensor([y_shift, x_shift]).reshape(1, 2, 1, 1)
 
+    if fill_value is not None:
+        # grid_sample modifies the grid, so we have to compute indices before
+        # We want to zero out the pixels that are outside of the original equi image
+        # That means places where 
+        #   grid[:, 0, ...] (y) < 0
+        #   grid[:, 1, ...] (x) < 0
+        #   grid[:, 0, ...] (y) > h_equi
+        #   grid[:, 1, ...] (x) > w_equi
+        h_equi, w_equi = equi.shape[-2:]
+        indices = torch.nonzero((grid[:, 0, ...] < 0) | (grid[:, 1, ...] < 0) | (grid[:, 0, ...] > h_equi) | (grid[:, 1, ...] > w_equi))
+
     # grid sample
     out = grid_sample(
         img=equi,
@@ -119,14 +130,6 @@ def run(
     )
 
     if fill_value is not None:
-        # We want to zero out the pixels that are outside of the original equi image
-        # That means places where 
-        #   grid[:, 0, ...] (y) < 0
-        #   grid[:, 1, ...] (x) < 0
-        #   grid[:, 0, ...] (y) > h_equi
-        #   grid[:, 1, ...] (x) > w_equi
-        h_equi, w_equi = equi.shape[-2:]
-        indices = torch.nonzero((grid[:, 0, ...] < 0) | (grid[:, 1, ...] < 0) | (grid[:, 0, ...] > h_equi) | (grid[:, 1, ...] > w_equi))
-        out[indices[0], :, indices[1], indices[2]] = fill_value
+        out[indices[..., 0], :, indices[..., 1], indices[..., 2]] = torch.tensor(fill_value).to(out.device, dtype=out.dtype)
 
     return out
