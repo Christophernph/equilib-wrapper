@@ -42,7 +42,7 @@ The above code will generate the following perspective image.
 
 ![](assets/perspective.png)
 
-It is also possible to specify the range of the equirectangular image used, e.g. if only the bottom-half of the panorama exists, we can specify the range as follows:
+It is also possible to specify the range of the equirectangular image used, e.g. if only the top-half of the panorama exists, we can specify the range as follows:
 
 ```python
 from equilib_wrapper import equi2pers
@@ -50,14 +50,14 @@ import numpy as np
 
 equi = Image.open("assets/panorama.png").convert("RGB")
 equi = np.asarray(equi).transpose(2, 0, 1) # expects channels first
-equi = equi[:, :equi.shape[1] // 2, :] # only use the bottom half
+equi = equi[:, :equi.shape[1] // 2, :] # only use the top half
 
 # parameters
 height = 1024
 width = 1536
 hfov = 90
 rotation = np.array([20, 0, 0]) # roll, pitch, yaw
-vrange = (0, 90) # specify range of the equirectangular image
+vrange = (-90, 0) # specify range of the equirectangular image
 
 # convert
 result = equi2pers(
@@ -85,14 +85,14 @@ import numpy as np
 
 equi = Image.open("assets/panorama.png").convert("RGB")
 equi = np.asarray(equi).transpose(2, 0, 1) # expects channels first
-equi = equi[:, :equi.shape[1] // 2, :] # only use the bottom half
+equi = equi[:, :equi.shape[1] // 2, :] # only use the top half
 
 # parameters
 height = 1024
 width = 1536
 hfov = 90
 rotation = np.array([20, 0, 0]) # roll, pitch, yaw
-vrange = (0, 90) # specify range of the equirectangular image
+vrange = (-90, 0) # specify range of the equirectangular image
 
 # convert
 result = equi2pers(
