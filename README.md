@@ -1,5 +1,5 @@
 # Equilib-Wrapper
-A simple wrapper for the (https://github.com/haruishi43/equilib/)[pyequilib] library that simplifies some syntax and adds some features.
+A simple wrapper for the [pyequilib](https://github.com/haruishi43/equilib/) library that simplifies some syntax and adds some features.
 
 ## Installation
 ```bash
