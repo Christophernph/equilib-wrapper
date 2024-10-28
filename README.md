@@ -42,7 +42,7 @@ The above code will generate the following perspective image.
 
 ![](assets/perspective.png)
 
-It is also possible to specify the range of the equirectangular image used, e.g. if only the top-half of the panorama exists, we can specify the range as follows:
+It is also possible to specify the range of the equirectangular image used, e.g. if only the bottom-half of the panorama exists, we can specify the range as follows:
 
 ```python
 from equilib_wrapper import equi2pers
