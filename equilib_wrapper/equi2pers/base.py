@@ -15,8 +15,8 @@ def equi2pers(
     hfov: float = None,
     vfov: float = None,
     skew: float = 0.0,
-    h_range: Tuple[float, float] = None,
-    v_range: Tuple[float, float] = None,
+    hrange: Tuple[float, float] = None,
+    vrange: Tuple[float, float] = None,
     degrees: bool = False,
     fill_mode: str = "wrap",
     pad_value: ArrayLike = (0, 0, 0),
@@ -34,8 +34,8 @@ def equi2pers(
         width (int): Width of the perspective image.
         hfov (float, optional): Horizontal field of view in degrees. Only one of hfov and vfov can be specified. Defaults to None.
         vfov (float, optional): Vertical field of view in degrees. Only one of hfov and vfov can be specified. Defaults to None.
-        h_range (Tuple[float, float], optional): Horizontal range of the equirectangular image in radians. See 'degrees' for unit. If None, the full range is used. Defaults to (-np.pi, np.pi).
-        v_range (Tuple[float, float], optional): Vertical range of the equirectangular image in radians. See 'degrees' for unit. If None, the full range is used. Defaults to (-np.pi / 2, np.pi / 2).
+        hrange (Tuple[float, float], optional): Horizontal range of the equirectangular image in radians. See 'degrees' for unit. If None, the full range is used. Defaults to (-np.pi, np.pi).
+        vrange (Tuple[float, float], optional): Vertical range of the equirectangular image in radians. See 'degrees' for unit. If None, the full range is used. Defaults to (-np.pi / 2, np.pi / 2).
         degrees (bool, optional): Whether angles are in degrees. Defaults to False.
         fill_mode (str, optional): Fill mode for regions outside of the original equirectangular image. Defaults to "wrap".
         pad_value (ArrayLike, optional): Fill value for the pixels that are outside of the original equirectangular image. Only used when fill_mode is "pad". Defaults to (0, 0, 0).
@@ -50,10 +50,10 @@ def equi2pers(
     # Check input validity
     if hfov and vfov:
         raise ValueError("Only one of hfov and vfov can be specified.")
-    # if (h_range[0] > h_range[1] or v_range[0] > v_range[1]
-    #     or h_range[0] < -np.pi or h_range[1] > np.pi
-    #     or v_range[0] < -np.pi / 2 or v_range[1] > np.pi / 2): # update these checks to match 'degrees'
-    #     raise ValueError("Invalid h_range or v_range.")
+    # if (hrange[0] > hrange[1] or vrange[0] > vrange[1]
+    #     or hrange[0] < -np.pi or hrange[1] > np.pi
+    #     or vrange[0] < -np.pi / 2 or vrange[1] > np.pi / 2): # update these checks to match 'degrees'
+    #     raise ValueError("Invalid hrange or vrange.")
     if fill_mode not in ["wrap", "pad"]:
         raise ValueError("Invalid fill_mode.")
     
@@ -64,11 +64,11 @@ def equi2pers(
         if vfov:
             vfov = np.radians(vfov)
         
-        h_range = (-np.pi, np.pi) if h_range is None else tuple(np.radians(h) for h in h_range)
-        v_range = (-np.pi / 2, np.pi / 2) if v_range is None else tuple(np.radians(v) for v in v_range)
+        hrange = (-np.pi, np.pi) if hrange is None else tuple(np.radians(h) for h in hrange)
+        vrange = (-np.pi / 2, np.pi / 2) if vrange is None else tuple(np.radians(v) for v in vrange)
     else:
-        h_range = (-np.pi, np.pi) if h_range is None else h_range
-        v_range = (-np.pi / 2, np.pi / 2) if v_range is None else v_range
+        hrange = (-np.pi, np.pi) if hrange is None else hrange
+        vrange = (-np.pi / 2, np.pi / 2) if vrange is None else vrange
     
     if vfov:
         hfov = camera.vfov_to_hfov(vfov, width, height)
@@ -94,8 +94,8 @@ def equi2pers(
             skew=skew,
             z_down=z_down,
             mode=mode,
-            h_range=h_range,
-            v_range=v_range,
+            h_range=hrange,
+            v_range=vrange,
             clip_output=clip_output,
             fill_value=None if fill_mode == "wrap" else pad_value,
             **kwargs
@@ -113,8 +113,8 @@ def equi2pers(
             skew=skew,
             z_down=z_down,
             mode=mode,
-            h_range=h_range,
-            v_range=v_range,
+            h_range=hrange,
+            v_range=vrange,
             clip_output=clip_output,
             fill_value=None if fill_mode == "wrap" else pad_value,
             **kwargs
